@@ -26,7 +26,8 @@ const lodash = require("lodash"),
     semver = require("semver"),
     ejs = require("ejs"),
     loadPerf = require("load-perf"),
-    yaml = require("js-yaml");
+    yaml = require("js-yaml"),
+    pathUtil = require("./lib/util/path-util");
 
 //------------------------------------------------------------------------------
 // Settings
@@ -650,7 +651,7 @@ target.gensite = function(prereleaseVersion) {
                 }
                 const added = versions.added[baseName];
 
-                if (!versions.removed[baseName] && !fs.existsSync(sourcePath)) {
+                if (!versions.removed[baseName] && !pathUtil.isFile(sourcePath)) {
                     versions.removed[baseName] = getFirstVersionOfDeletion(sourcePath);
                 }
                 const removed = versions.removed[baseName];

@@ -13,6 +13,7 @@ const assert = require("chai").assert,
     shell = require("shelljs"),
     sinon = require("sinon"),
     npmUtil = require("../../../lib/util/npm-util"),
+    pathUtil = require("../../../lib/util/path-util"),
     log = require("../../../lib/logging"),
     mockFs = require("mock-fs");
 
@@ -61,7 +62,7 @@ describe("npmUtil", function() {
         });
 
         it("should handle missing devDependencies key", function() {
-            sandbox.stub(fs, "existsSync", function() {
+            sandbox.stub(pathUtil, "isFile", function() {
                 return true;
             });
             sandbox.stub(fs, "readFileSync", function() {
@@ -79,7 +80,7 @@ describe("npmUtil", function() {
         it("should throw with message when parsing invalid package.json", function() {
             const logInfo = sandbox.stub(log, "info");
 
-            sandbox.stub(fs, "existsSync", function() {
+            sandbox.stub(pathUtil, "isFile", function() {
                 return true;
             });
             sandbox.stub(fs, "readFileSync", function() {
@@ -129,7 +130,7 @@ describe("npmUtil", function() {
         });
 
         it("should handle missing dependencies key", function() {
-            sandbox.stub(fs, "existsSync", function() {
+            sandbox.stub(pathUtil, "isFile", function() {
                 return true;
             });
             sandbox.stub(fs, "readFileSync", function() {
@@ -143,14 +144,14 @@ describe("npmUtil", function() {
 
             assert.doesNotThrow(fn);
 
-            fs.existsSync.restore();
+            pathUtil.isFile.restore();
             fs.readFileSync.restore();
         });
 
         it("should throw with message when parsing invalid package.json", function() {
             const logInfo = sandbox.stub(log, "info");
 
-            sandbox.stub(fs, "existsSync", function() {
+            sandbox.stub(pathUtil, "isFile", function() {
                 return true;
             });
             sandbox.stub(fs, "readFileSync", function() {
@@ -163,7 +164,7 @@ describe("npmUtil", function() {
             assert(logInfo.calledOnce);
             assert.equal(logInfo.firstCall.args[0], "Could not read package.json file. Please check that the file contains valid JSON.");
 
-            fs.existsSync.restore();
+            pathUtil.isFile.restore();
             fs.readFileSync.restore();
             logInfo.restore();
         });
